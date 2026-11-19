@@ -1,0 +1,17 @@
+name: Jana gambar produk
+on:
+  workflow_dispatch:
+  push:
+    paths: ['src/**']
+permissions:
+  contents: write
+jobs:
+  jana:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pillow
+      - run: python src/make.py .
+      - run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add *.jpg; git diff --cached --quiet || (git commit -m "Jana gambar foto produk" && git push)

@@ -1,0 +1,19 @@
+name: Jana video produk
+on:
+  workflow_dispatch:
+    inputs:
+      no:
+        description: 'Nombor produk (1-35)'
+        required: true
+permissions:
+  contents: write
+jobs:
+  video:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg && pip install pillow
+      - run: python src/video.py ${{ inputs.no }} video
+      - run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add video/*.mp4; git diff --cached --quiet || (git commit -m "Jana video produk ${{ inputs.no }}" && git push)
